@@ -4,6 +4,19 @@ set -eo pipefail
 
 apt-get update && apt-get install -y libpcap-dev zip
 
+sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+		g++ \
+		gcc \
+		libc6-dev \
+		make \
+		pkg-config \
+        ca-certificates \
+        wget \  
+        git \      
+	build-essential \
+	mingw-w64 \
+	nsis
+
 export OSXCROSS_NO_INCLUDE_PATH_WARNINGS=1
 export MACOSX_DEPLOYMENT_TARGET=10.6
 export CC=/usr/osxcross/bin/o64-clang
@@ -30,6 +43,7 @@ cp -v run.command ./$TEMP/run.command
 chown -Rv ${USER}:${USER} ./$TEMP
 chmod -v 777 ./$TEMP/*
 zip -v ../$ZIPNAME -r ./"$TEMP"
+ls -la
 
 # In theory the following works to create an app but there was a permissions issue when opening on the mac
 # APP_NAME="Albion Data Client"
