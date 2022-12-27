@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-sudo apt update && sudo apt install -y nsis nsis-pluginapi wine
+sudo apt update && sudo apt install -y nsis nsis-pluginapi wine wine32
 
 export CGO_CPPFLAGS="-I $GOPATH/src/github.com/broderickhyman/albiondata-client/thirdparty/WpdPack/Include/"
 export CGO_LDFLAGS="-L $GOPATH/src/github.com/broderickhyman/albiondata-client/thirdparty/WpdPack/Lib/x64/"
