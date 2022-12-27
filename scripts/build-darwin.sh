@@ -10,7 +10,7 @@ export CC=/usr/osxcross/bin/o64-clang
 export CXX=/usr/osxcross/bin/o64-clang++
 export GOOS=darwin
 export GOARCH=amd64 CGO_ENABLED=1
-go build -ldflags "-s -w -X main.version=$CIRCLE_TAG" albiondata-client.go
+go build -ldflags "-s -w -X main.version=$GITHUB_REF_NAME" albiondata-client.go
 
 
 gzip -k9 albiondata-client
