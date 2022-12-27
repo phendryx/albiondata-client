@@ -20,7 +20,7 @@ jobs:
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: update-linux-amd64.gz
-build-windows:
+  build-windows:
     name: Build on Windows
     runs-on: windows-latest
     steps:
