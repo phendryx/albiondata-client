@@ -2,8 +2,6 @@
 
 set -eo pipefail
 
-GITHUB_REF_NAME=1.2.3
-
 sudo apt update && sudo apt install -y nsis nsis-pluginapi
 
 export CGO_CPPFLAGS="-I $GOPATH/src/github.com/broderickhyman/albiondata-client/thirdparty/WpdPack/Include/"
