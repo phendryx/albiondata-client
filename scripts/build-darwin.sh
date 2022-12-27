@@ -4,6 +4,50 @@ set -eo pipefail
 
 # apt-get update && sudo apt-get install -y libpcap-dev zip
 
+sudo dpkg --add-architecture arm64                      \
+ && sudo dpkg --add-architecture armel                      \
+ && sudo dpkg --add-architecture armhf                      \
+ && sudo dpkg --add-architecture i386                       \
+ && sudo dpkg --add-architecture mips                       \
+ && sudo dpkg --add-architecture mipsel                     \
+ && sudo dpkg --add-architecture powerpc                    \
+ && sudo dpkg --add-architecture ppc64el                    \
+ && sudo apt-get update                                     \
+ && sudo apt-get install -y -q                              \
+        autoconf                                       \
+        automake                                       \
+        autotools-dev                                  \
+        bc                                             \
+        binfmt-support                                 \
+        binutils-multiarch                             \
+        binutils-multiarch-dev                         \
+        build-essential                                \
+        clang                                          \
+        crossbuild-essential-arm64                     \
+        crossbuild-essential-armel                     \
+        crossbuild-essential-armhf                     \
+        crossbuild-essential-mipsel                    \
+        crossbuild-essential-ppc64el                   \
+        curl                                           \
+        devscripts                                     \
+        gdb                                            \
+        git-core                                       \
+        libtool                                        \
+        llvm                                           \
+        mercurial                                      \
+        multistrap                                     \
+        patch                                          \
+        software-properties-common                     \
+        subversion                                     \
+        wget                                           \
+        xz-utils                                       \
+        cmake                                          \
+        qemu-user-static                               \
+        libxml2-dev                                    \
+        lzma-dev                                       \
+        openssl                                        \
+        libssl-dev                                     \
+
 sudo apt-get update && sudo apt-get install -y --no-install-recommends \
 		g++ \
 		gcc \
