@@ -20,22 +20,22 @@ jobs:
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: update-linux-amd64.gz
-  build-windows:
-    name: Build Windows Client
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.16
-    - name: Build
-      run: make build-windows
-    - uses: shogo82148/actions-upload-release-asset@v1
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: update-windows-amd64.exe.gz
-    - uses: shogo82148/actions-upload-release-asset@v1
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: albiondata-client-amd64-installer.exe
+  # build-windows:
+  #   name: Build Windows Client
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Set up Go
+  #     uses: actions/setup-go@v3
+  #     with:
+  #       go-version: 1.16
+  #   - name: Build
+  #     run: make build-windows
+  #   - uses: shogo82148/actions-upload-release-asset@v1
+  #     with:
+  #       upload_url: ${{ github.event.release.upload_url }}
+  #       asset_path: update-windows-amd64.exe.gz
+  #   - uses: shogo82148/actions-upload-release-asset@v1
+  #     with:
+  #       upload_url: ${{ github.event.release.upload_url }}
+  #       asset_path: albiondata-client-amd64-installer.exe

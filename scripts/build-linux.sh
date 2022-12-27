@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-sudo apt-get update && apt-get install -y libpcap-dev
+sudo apt-get update && sudo apt-get install -y libpcap-dev
 
 go build -ldflags "-s -w -X main.version=$GITHUB_REF_NAME" albiondata-client.go
 ls -la
