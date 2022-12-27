@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-apt-get update && apt-get install -y libpcap-dev zip
+# apt-get update && sudo apt-get install -y libpcap-dev zip
 
 sudo apt-get update && sudo apt-get install -y --no-install-recommends \
 		g++ \
