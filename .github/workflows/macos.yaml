@@ -24,3 +24,5 @@ jobs:
     - name: Build
       run: go build -ldflags "-s -w -X main.version=1.2.3" albiondata-client.go
 
+    - name: ls
+      run: ls -la
