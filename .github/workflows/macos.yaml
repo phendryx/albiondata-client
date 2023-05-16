@@ -26,3 +26,28 @@ jobs:
 
     - name: ls
       run: ls -la
+
+    - name: gzip
+      run: gzip -k9 albiondata-client
+
+    - name: mv
+      run: mv albiondata-client.gz update-darwin-amd64.gz
+      
+    - name: package
+      run: |
+        TEMP="albiondata-client"
+        ZIPNAME="albiondata-client-amd64-mac.zip"
+        rm -rfv ./scripts/$TEMP
+        rm -rfv ./$ZIPNAME
+        rm -rfv ./scripts/update-darwin-amd64.zip
+        mkdir -v ./scripts/$TEMP
+        cp -v albiondata-client ./scripts/$TEMP/albiondata-client-executable
+        cd scripts
+        cp -v run.command ./$TEMP/run.command
+        chown -Rv ${USER}:${USER} ./$TEMP
+        chmod -v 777 ./$TEMP/*
+        zip -v ../$ZIPNAME -r ./"$TEMP"      
+      
+    - name: ls
+      run: ls -la
+      
