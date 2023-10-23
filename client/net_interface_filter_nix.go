@@ -16,7 +16,7 @@ func getAllPhysicalInterface() ([]string, error) {
 
        var outInterfaces []string
 
-       wantedDevices := strings.Split(strings.ReplaceAll(strings.ToLower(ConfigGlobal.ListenDevices), "-", ":"), ",")
+       wantedDevices := strings.Split(ConfigGlobal.ListenDevices, ",")
        // -l option was given, filter for explicit wanted devices
        if (ConfigGlobal.ListenDevices != "") && len(wantedDevices) > 0 {
                for _, wantedDevice := range wantedDevices {
