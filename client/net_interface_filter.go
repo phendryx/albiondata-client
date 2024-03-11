@@ -8,6 +8,7 @@ import (
 var macAddrPartsToFilter = []string{
 	"ac:de:48:00:11:22", // Mac OS touchbar (en5)
 	"00:03:FF",          // Microsoft Hyper-V, Virtual Server, Virtual PC
+	"00:15:5D",          // Windows WSL2 or Hyper-V related
 	"0A:00:27",          // VirtualBox
 	"00:00:00:00:00",    // Teredo Tunneling Pseudo-Interface
 	"00:50:56",          // VMware ESX 3, Server, Workstation, Player
