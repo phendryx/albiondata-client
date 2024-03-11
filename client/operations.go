@@ -89,7 +89,7 @@ const (
 	opFarmableGetProduct
 	opFarmableFill
 	opTearDownConstructionSite
-	opCastleGateUse
+	opPlaceholder1
 	opAuctionCreateOffer
 	opAuctionCreateRequest
 	opAuctionGetOffers
@@ -269,6 +269,8 @@ const (
 	opUseLootChest
 	opUseShrine
 	opUseHellgateShrine
+	opUseSiegeBanner
+	opGetSiegeBannerInfo
 	opLaborerStartJob
 	opLaborerTakeJobLoot
 	opLaborerDismiss
@@ -320,8 +322,8 @@ const (
 	opClientLowMemoryWarning
 	opTerritoryClaimStart
 	opTerritoryClaimCancel
-	opClaimPowerCrystalStart
-	opClaimPowerCrystalCancel
+	opDeliverCarriableObjectStart
+	opDeliverCarriableObjectCancel
 	opTerritoryUpgradeWithPowerCrystal
 	opRequestAppStoreProducts
 	opVerifyProductPurchase
@@ -447,8 +449,8 @@ const (
 	opGetFactionWarfareCampaignData
 	opClaimFactionWarfareItemReward
 	opSendMemoryConsumption
-	opPickupPowerCrystalStart
-	opPickupPowerCrystalCancel
+	opPickupCarriableObjectStart
+	opPickupCarriableObjectCancel
 	opSetSavingChestLogsFlag
 	opGetSavingChestLogsFlag
 	opRegisterGuestAccount
@@ -509,4 +511,6 @@ const (
 	opGvGSeasonPlayerGuildParticipationDetails
 	opDailyMightBonus
 	opClaimDailyMightBonus
+	opGetFortificationGroupInfo
+	opUpgradeFortificationGroup
 )
