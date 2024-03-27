@@ -89,12 +89,13 @@ func (u *httpUploaderPow) uploadWithPow(pow Pow, solution string, natsmsg []byte
 	req, _ := http.NewRequest("POST", fullURL, strings.NewReader(data.Encode()))
 	req.Header.Add("User-Agent", fmt.Sprintf("albiondata-client/%v", version))
 	resp, err := client.Do(req)
-	defer resp.Body.Close()
 
 	if err != nil {
 		log.Errorf("Error while prooving pow: %v", err)
 		return
 	}
+	
+	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
 		body, err := ioutil.ReadAll(resp.Body)
