@@ -59,7 +59,15 @@ func sendMsgToPublicUploaders(upload interface{}, topic string, state *albionSta
 		return
 	}
 
-	var publicUploaders = createUploaders(strings.Split(ConfigGlobal.PublicIngestBaseUrls, ","))
+	var PublicIngestBaseUrls = ConfigGlobal.PublicIngestBaseUrls
+	// http+pow://albion-online-data.com is used as a magic placeholder for every realm there is
+	if strings.Contains(ConfigGlobal.PublicIngestBaseUrls, "http+pow://albion-online-data.com") {
+		// we replace the placeholder with the correct one based on the serverID from albionState
+		PublicIngestBaseUrls = strings.Replace(PublicIngestBaseUrls, "http+pow://albion-online-data.com", state.AODataIngestBaseURL, -1)
+	}
+
+
+	var publicUploaders = createUploaders(strings.Split(PublicIngestBaseUrls, ","))
 	var privateUploaders = createUploaders(strings.Split(ConfigGlobal.PrivateIngestBaseUrls, ","))
 
 	sendMsgToUploaders(data, topic, publicUploaders, state)

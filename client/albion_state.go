@@ -23,6 +23,7 @@ type albionState struct {
 	CharacterName  string
 	GameServerIP   string
 	AODataServerID int
+	AODataIngestBaseURL string
 
 	// A lot of information is sent out but not contained in the response when requesting marketHistory (e.g. ID)
 	// This information is stored in marketHistoryInfo
@@ -50,9 +51,10 @@ func (state albionState) IsValidLocation() bool {
 	return true
 }
 
-func (state albionState) GetServerID() int {
+func (state albionState) GetServer() (int, string) {
 	// default to 0
 	var serverID = 0
+	var AODataIngestBaseURL = ""
 
 	// if we happen to have a server id stored in state, lets re-default to that
 	if state.AODataServerID != 0 {
@@ -66,29 +68,24 @@ func (state albionState) GetServerID() int {
 		// west server class c ip range
 		serverID = 1
 		isAlbionIP = true
+		AODataIngestBaseURL = "http+pow://pow.west.albion-online-data.com"
 	} else if strings.HasPrefix(state.GameServerIP, "5.45.187.") {
 		// east server class c ip range
 		isAlbionIP = true
 		serverID = 2
-	}
-
-	// determine if the ConfigGlobal.PublicIngestBaseUrls contains either default east/west
-	// data project server submission, if so, make sure it's set to the right hostname
-	var westUrl = "http+pow://pow.west.albion-online-data.com"
-	var eastUrl = "http+pow://pow.east.albion-online-data.com"
-	if serverID == 1 && strings.Contains(ConfigGlobal.PublicIngestBaseUrls, eastUrl) {
-		// we're on west but using east hostname, change it
-		ConfigGlobal.PublicIngestBaseUrls = strings.ReplaceAll(ConfigGlobal.PublicIngestBaseUrls, eastUrl, westUrl)
-	} else if serverID == 2 && strings.Contains(ConfigGlobal.PublicIngestBaseUrls, westUrl) {
-		// we're on east but using west hostname, change it
-		ConfigGlobal.PublicIngestBaseUrls = strings.ReplaceAll(ConfigGlobal.PublicIngestBaseUrls, westUrl, eastUrl)
+		AODataIngestBaseURL = "http+pow://pow.east.albion-online-data.com"
+	} else if strings.HasPrefix(state.GameServerIP, "193.169.238.") {
+		// eu server class c ip range
+		isAlbionIP = true
+		serverID = 3
+		AODataIngestBaseURL = "http+pow://pow.europe.albion-online-data.com"
 	}
 
 	// if this was a known albion online server ip, then let's log it
 	if isAlbionIP {
-		log.Tracef("Using %v for PublicIngestBaseUrls", ConfigGlobal.PublicIngestBaseUrls)
 		log.Tracef("Returning Server ID %v (ip src: %v)", serverID, state.GameServerIP)
+		log.Tracef("Returning AODataIngestBaseURL %v (ip src: %v)", AODataIngestBaseURL, state.GameServerIP)
 	}
 
-	return serverID
+	return serverID, AODataIngestBaseURL
 }
