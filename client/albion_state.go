@@ -60,6 +60,9 @@ func (state albionState) GetServer() (int, string) {
 	if state.AODataServerID != 0 {
 		serverID = state.AODataServerID
 	}
+	if state.AODataIngestBaseURL != "" {
+		AODataIngestBaseURL = state.AODataIngestBaseURL
+	}
 
 	// we get packets from other than game servers, so determine if it's a game server
 	// based on soruce ip and if its east/west servers
