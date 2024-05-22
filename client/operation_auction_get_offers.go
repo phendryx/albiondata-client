@@ -5,6 +5,7 @@ import (
 
 	"github.com/ao-data/albiondata-client/lib"
 	"github.com/ao-data/albiondata-client/log"
+	uuid "github.com/nu7hatch/gouuid"
 )
 
 type operationAuctionGetOffers struct {
@@ -20,6 +21,7 @@ type operationAuctionGetOffers struct {
 
 func (op operationAuctionGetOffers) Process(state *albionState) {
 	log.Debug("Got AuctionGetOffers operation...")
+	state.WaitingForMarketData = true
 }
 
 type operationAuctionGetOffersResponse struct {
@@ -28,6 +30,7 @@ type operationAuctionGetOffersResponse struct {
 
 func (op operationAuctionGetOffersResponse) Process(state *albionState) {
 	log.Debug("Got response to AuctionGetOffers operation...")
+	state.WaitingForMarketData = false
 
 	if !state.IsValidLocation() {
 		return
@@ -50,10 +53,13 @@ func (op operationAuctionGetOffersResponse) Process(state *albionState) {
 		return
 	}
 
+	identifier, _ := uuid.NewV4()
+
 	upload := lib.MarketUpload{
-		Orders: orders,
+		Orders:     orders,
+		Identifier: identifier.String(),
 	}
 
-	log.Infof("Sending %d market offers to ingest", len(orders))
+	log.Infof("Sending %d live market sell orders to ingest (Identifier: %s)", len(orders), identifier)
 	sendMsgToPublicUploaders(upload, lib.NatsMarketOrdersIngest, state)
 }
