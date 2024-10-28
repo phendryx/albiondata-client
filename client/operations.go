@@ -11,7 +11,8 @@ type operation interface {
 //               "MarleyTheMongolianMoose: AuctionGetItemsAverage == 92 == kind
 //               of looks like it disappears in the new one"
 
-//OperationType used to identify operation types
+// OperationType used to identify operation types
+//
 //go:generate stringer -type=OperationType
 type OperationType uint16
 
@@ -135,6 +136,7 @@ const (
 	opGetMatchDetails
 	opJoinMatch
 	opLeaveMatch
+	opGetClusterInstanceInfoForStaticCluster
 	opChangeChatSettings
 	opLogoutStart
 	opLogoutCancel
@@ -228,14 +230,10 @@ const (
 	opAllianceChangeGoldPaymentFlag
 	opAllianceGetDetailInfo
 	opGetIslandInfos
-	opAbandonMyIsland
 	opBuyMyIsland
 	opBuyGuildIsland
-	opAbandonGuildIsland
 	opUpgradeMyIsland
 	opUpgradeGuildIsland
-	opMoveMyIsland
-	opMoveGuildIsland
 	opTerritoryFillNutrition
 	opTeleportBack
 	opPartyInvitePlayer
@@ -268,7 +266,6 @@ const (
 	opUseLootChest
 	opUseShrine
 	opUseHellgateShrine
-	opUseSiegeBanner
 	opGetSiegeBannerInfo
 	opLaborerStartJob
 	opLaborerTakeJobLoot
@@ -284,7 +281,7 @@ const (
 	opFriendCancelnvitation
 	opFriendRemove
 	opInventoryStack
-	opInventorySort
+	opInventoryReorder
 	opInventoryDropAll
 	opInventoryAddToStacks
 	opEquipmentItemChangeSpell
@@ -512,4 +509,12 @@ const (
 	opClaimDailyMightBonus
 	opGetFortificationGroupInfo
 	opUpgradeFortificationGroup
+	opCancelUpgradeFortificationGroup
+	opDowngradeFortificationGroup
+	opGetClusterActivityChestEstimates
+	opPartyReadyCheckBegin
+	opPartyReadyCheckUpdate
+	opClaimAlbionJournalReward
+	opTrackAlbionJournalAchievements
+	opRequestOutlandsTeleportationUsage
 )

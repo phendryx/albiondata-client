@@ -1,6 +1,7 @@
 package client
 
-//EventType used to identify event types
+// EventType used to identify event types
+//
 //go:generate stringer -type=EventType
 type EventType uint16
 
@@ -12,6 +13,7 @@ const (
 	evTeleport
 	evChangeEquipment
 	evHealthUpdate
+	evHealthUpdates
 	evEnergyUpdate
 	evDamageShieldUpdate
 	evCraftingFocusUpdate
@@ -32,6 +34,7 @@ const (
 	evAttackBuilding
 	evInventoryPutItem
 	evInventoryDeleteItem
+	evInventoryState
 	evNewCharacter
 	evNewEquipmentItem
 	evNewSiegeBannerItem
@@ -66,6 +69,7 @@ const (
 	evHarvestCancel
 	evHarvestFinished
 	evTakeSilver
+	evRemoveSilver
 	evActionOnBuildingStart
 	evActionOnBuildingCancel
 	evActionOnBuildingFinished
@@ -112,6 +116,7 @@ const (
 	evUpdateMatchDetails
 	evObjectEvent
 	evNewMonolithObject
+	evMonolithHasBannersPlacedUpdate
 	evNewOrbObject
 	evNewCastleObject
 	evNewSpellEffectArea
@@ -242,6 +247,7 @@ const (
 	evPartyOnClusterPartyJoined
 	evPartySetRoleFlag
 	evPartyInviteOrJoinPlayerEquipmentInfo
+	evPartyReadyCheckUpdate
 	evSpellCooldownUpdate
 	evNewHellgateExitPortal
 	evNewExpeditionExit
@@ -499,6 +505,7 @@ const (
 	evPartyStartHuntRequest
 	evPartyStartHuntRequested
 	evPartyStartHuntRequestAnswer
+	evPartyPlayerLeaveScheduled
 	evGuildInviteDeclined
 	evCancelMultiSpellSlots
 	evNewVisualEventObject
@@ -580,6 +587,22 @@ const (
 	evMonolithFortificationPointsUpdate
 	evFortificationBuildingUpgradeInfo
 	evFortificationBuildingsDamageStateUpdate
+	evSiegeNotificationEvent
 	evUpdateEnemyWarBannerActive
 	evTerritoryAnnouncePlayerEjection
+	evCastleGateSwitchUseStarted
+	evCastleGateSwitchUseFinished
+	evFortificationBuildingWillDowngrade
+	evBotCommand
+	evJournalAchievementProgressUpdate
+	evJournalClaimableRewardUpdate
+	evKeySync
+	evLocalQuestAreaGone
+	evDynamicTemplate
+	evDynamicTemplateForcedStateChange
+	evNewOutlandsTeleportationPortal
+	evNewOutlandsTeleportationReturnPortal
+	evOutlandsTeleportationBindingCleared
+	evOutlandsTeleportationReturnPortalUpdateEvent
+	evPlayerUsedOutlandsTeleportationPortal
 )
