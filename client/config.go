@@ -40,7 +40,7 @@ type config struct {
 	PrintVersion                   bool
 }
 
-//config global config data
+// config global config data
 var ConfigGlobal = &config{
 	LogLevel: "INFO",
 }
@@ -55,6 +55,13 @@ func (config *config) SetupFlags() {
 	if config.OfflinePath != "" {
 		config.Offline = true
 		config.DisableUpload = true
+
+		if config.PublicIngestBaseUrls == "http+pow://west.aodp.local:3000" {
+			config.DisableUpload = false
+		}
+
+		log.Infof("config.PublicIngestBaseUrls: %v", config.PublicIngestBaseUrls)
+		log.Infof("config.DisableUpload: %v", config.DisableUpload)
 	}
 
 	if config.DisableUpload {
