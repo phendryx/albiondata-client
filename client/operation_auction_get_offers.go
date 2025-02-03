@@ -17,7 +17,7 @@ type operationAuctionGetOffers struct {
 	Enchantment      uint32   `mapstructure:"4"`
 	EnchantmentLevel string   `mapstructure:"8"`
 	ItemIds          []uint16 `mapstructure:"6"`
-	MaxResults       uint32   `mapstructure:"9"`
+	MaxResults       uint32   `mapstructure:"10"`
 	IsAscendingOrder bool     `mapstructure:"12"`
 }
 

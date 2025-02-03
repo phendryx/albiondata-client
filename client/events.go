@@ -93,7 +93,7 @@ const (
 	evUpdateReSpecPoints
 	evUpdateCurrency
 	evUpdateFactionStanding
-	evUpdateMistCityStanding
+	evUpdateStanding
 	evRespawn
 	evServerDebugLog
 	evCharacterEquipmentChanged
@@ -152,8 +152,11 @@ const (
 	evCharacterStats
 	evCharacterStatsKillHistory
 	evCharacterStatsDeathHistory
+	evCharacterStatsKnockDownHistory
+	evCharacterStatsKnockedDownHistory
 	evGuildStats
 	evKillHistoryDetails
+	evItemKillHistoryDetails
 	evFullAchievementInfo
 	evFinishedAchievement
 	evAchievementProgressInfo
@@ -307,6 +310,7 @@ const (
 	evDefenseUnitAttackEnd
 	evDefenseUnitAttackDamage
 	evUnrestrictedPvpZoneUpdate
+	evUnrestrictedPvpZoneStatus
 	evReputationImplicationUpdate
 	evNewMountObject
 	evMountHealthUpdate
@@ -528,8 +532,8 @@ const (
 	evMistsCityRoadsEntrancePartyStateUpdate
 	evMistsCityRoadsEntranceClearStateForParty
 	evMistsEntranceDataChanged
-	evNewMistsCagedWisp
-	evMistsWispCageOpened
+	evNewCagedObject
+	evCagedObjectStateUpdated
 	evMistsEntrancePartyBindingCreated
 	evMistsEntrancePartyBindingCleared
 	evMistsEntrancePartyBindingInfos
@@ -605,4 +609,15 @@ const (
 	evOutlandsTeleportationBindingCleared
 	evOutlandsTeleportationReturnPortalUpdateEvent
 	evPlayerUsedOutlandsTeleportationPortal
+	evEncumberedRestricted
+	evNewPiledObject
+	evPiledObjectStateChanged
+	evNewSmugglerCrateDeliveryStation
+	evKillRewardedNoFame
+	evPickupFromPiledObjectStart
+	evPickupFromPiledObjectCancel
+	evPickupFromPiledObjectReset
+	evPickupFromPiledObjectFinished
+	evArmoryActivityChange
+	evNewKillTrophyFurnitureBuilding
 )
