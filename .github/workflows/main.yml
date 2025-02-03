@@ -37,19 +37,19 @@ jobs:
     - name: Make
       run: make build-windows
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ env.ACT }}
       with:
         name: files
         path: albiondata-client.exe
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ env.ACT }}
       with:
         name: files
         path: update-windows-amd64.exe.gz
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ env.ACT }}
       with:
         name: files

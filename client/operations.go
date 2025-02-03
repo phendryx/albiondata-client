@@ -517,4 +517,15 @@ const (
 	opClaimAlbionJournalReward
 	opTrackAlbionJournalAchievements
 	opRequestOutlandsTeleportationUsage
+	opPickupFromPiledObjectStart
+	opPickupFromPiledObjectCancel
+	opAssetOverview
+	opAssetOverviewTabs
+	opAssetOverviewTabContent
+	opAssetOverviewUnfreezeCache
+	opAssetOverviewSearch
+	opAssetOverviewSearchTabs
+	opAssetOverviewSearchTabContent
+	opAssetOverviewRecoverPlayerVault
+	opImmortalizeKillTrophy
 )

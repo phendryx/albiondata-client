@@ -31,6 +31,11 @@ func (op operationJoinResponse) Process(state *albionState) {
 		op.Location = strings.Replace(op.Location, "-Auction2", "", -1)
 	}
 
+	// Allow for smugglers rest locations markets to be parsed by setting a valid location int
+	if strings.HasPrefix(op.Location, "BLACKBANK-") {
+		op.Location = strings.Replace(op.Location, "BLACKBANK-", "", -1)
+	}
+
 	loc, err := strconv.Atoi(op.Location)
 	if err != nil {
 		log.Debugf("Unable to convert zoneID to int. Probably an instance.")

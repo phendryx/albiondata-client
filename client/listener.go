@@ -208,7 +208,7 @@ func (l *listener) onReliableCommand(command *photon.PhotonCommand) {
 
 		if fmt.Sprint(err) == "Encryption not supported" && l.router.albionstate.WaitingForMarketData == true {
 			l.router.albionstate.WaitingForMarketData = false
-			log.Info("Market data is encrypted. Please see https://discord.com/channels/336216450689794048/586173260564267028 for more information.")
+			log.Info("Market data is encrypted. Please see https://www.albion-online-data.com/client/encryption.html for more information.")
 		}
 
 		if !ConfigGlobal.DebugIgnoreDecodingErrors {
