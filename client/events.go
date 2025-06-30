@@ -379,7 +379,6 @@ const (
 	evNewUnlockedPersonalSeasonRewards
 	evPersonalSeasonPointsGained
 	evPersonalSeasonPastSeasonDataEvent
-	evEasyAntiCheatMessageToClient
 	evMatchLootChestOpeningStart
 	evMatchLootChestOpeningFinished
 	evMatchLootChestOpeningCancel
@@ -401,7 +400,7 @@ const (
 	evNewShrine
 	evUpdateShrine
 	evUpdateRoom
-	evNewMistDungeonRoomMobSoul
+	evNewMobSoul
 	evNewHellgateShrine
 	evUpdateHellgateShrine
 	evActivateHellgateExit
@@ -534,9 +533,9 @@ const (
 	evMistsEntranceDataChanged
 	evNewCagedObject
 	evCagedObjectStateUpdated
-	evMistsEntrancePartyBindingCreated
-	evMistsEntrancePartyBindingCleared
-	evMistsEntrancePartyBindingInfos
+	evEntrancePartyBindingCreated
+	evEntrancePartyBindingCleared
+	evEntrancePartyBindingInfos
 	evNewMistsBorderExit
 	evNewMistsDungeonExit
 	evLocalQuestInfos
@@ -620,4 +619,28 @@ const (
 	evPickupFromPiledObjectFinished
 	evArmoryActivityChange
 	evNewKillTrophyFurnitureBuilding
+	evHellDungeonsPlayerJoinedInfo
+	evNewTileSwitchTrigger
+	evNewMultiRewardObject
+	evNewHellDungeonSoulShrineObject
+	evHellDungeonSoulShrineStateUpdate
+	evNewResurrectionShrine
+	evUpdateResurrectionShrine
+	evStandTimeFinished
+	evEpicAchievementAndStatsUpdate
+	evSpectateTargetAfterDeathUpdate
+	evSpectateTargetAfterDeathEnded
+	evNewHellDungeonUpwardExit
+	evNewHellDungeonSoulExit
+	evNewHellDungeonDownwardExit
+	evNewHellDungeonChestExit
+	evNewCorruptedStaticEntrance
+	evNewHellDungeonStaticEntrance
+	evUpdateHellDungeonStaticEntranceState
+	evDebugTriggerHellDungeonShutdownStart
+	evFullJournalQuestInfo
+	evJournalQuestProgressInfo
+	evNewHellDungeonRoomShrineObject
+	evHellDungeonRoomShrineStateUpdate
+	evSimpleBehaviourBuildingStateUpdate
 )

@@ -157,7 +157,6 @@ const (
 	opGetCharacterSteamAchievements
 	opGetCharacterStats
 	opGetKillHistoryDetails
-	opLearnMasteryLevel
 	opReSpecAchievement
 	opChangeAvatar
 	opGetRankings
@@ -353,6 +352,10 @@ const (
 	opSteamIdHasActiveAccount
 	opCheckEmailAccountState
 	opLinkAccountToSteamId
+	opEpicIdHasActiveAccount
+	opLinkAccountToEpicId
+	opXboxIdHasActiveAccount
+	opLinkAccountToXboxToken
 	opInAppConfirmPaymentGooglePlay
 	opInAppConfirmPaymentAppleAppStore
 	opInAppPurchaseRequest
@@ -382,7 +385,6 @@ const (
 	opGetPersonalSeasonPastRewardData
 	opUseConsumableFromInventory
 	opClaimPersonalSeasonReward
-	opEasyAntiCheatMessageToServer
 	opXignCodeMessageToServer
 	opBattlEyeMessageToServer
 	opSetNextTutorialState
@@ -460,6 +462,10 @@ const (
 	opGetPvpChallengeData
 	opClaimPvpChallengeWeeklyReward
 	opGetPersonalMightStats
+	opGetPvpChallengeSeasonRewards
+	opGetPvpChallengeSeasonRewardItems
+	opClaimPvpChallengeSeasonRewards
+	opClaimPvpChallengeSeasonRewardItems
 	opAuctionGetLoadoutOffers
 	opAuctionBuyLoadoutOffer
 	opAccountDeletionRequest
@@ -516,6 +522,7 @@ const (
 	opPartyReadyCheckUpdate
 	opClaimAlbionJournalReward
 	opTrackAlbionJournalAchievements
+	opTrackAlbionJournalAchievementSubCategory
 	opRequestOutlandsTeleportationUsage
 	opPickupFromPiledObjectStart
 	opPickupFromPiledObjectCancel
@@ -528,4 +535,10 @@ const (
 	opAssetOverviewSearchTabContent
 	opAssetOverviewRecoverPlayerVault
 	opImmortalizeKillTrophy
+	opArmorySearch
+	opArmoryItemUsageStatistics
+	opArmoryActivityUsageStatistics
+	opHellDungeonUseStaticEntrance
+	opTravelIslandShowroom
+	opGetXuids
 )
