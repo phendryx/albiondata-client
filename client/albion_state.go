@@ -73,17 +73,17 @@ func (state albionState) GetServer() (int, string) {
 		// west server class c ip range
 		serverID = 1
 		isAlbionIP = true
-		AODataIngestBaseURL = "http+pow://pow.west.albion-online-data.com"
+		AODataIngestBaseURL = "https+pow://pow.west.albion-online-data.com"
 	} else if strings.HasPrefix(state.GameServerIP, "5.45.187.") {
 		// east server class c ip range
 		isAlbionIP = true
 		serverID = 2
-		AODataIngestBaseURL = "http+pow://pow.east.albion-online-data.com"
+		AODataIngestBaseURL = "https+pow://pow.east.albion-online-data.com"
 	} else if strings.HasPrefix(state.GameServerIP, "193.169.238.") {
 		// eu server class c ip range
 		isAlbionIP = true
 		serverID = 3
-		AODataIngestBaseURL = "http+pow://pow.europe.albion-online-data.com"
+		AODataIngestBaseURL = "https+pow://pow.europe.albion-online-data.com"
 	}
 
 	// if this was a known albion online server ip, then let's log it
