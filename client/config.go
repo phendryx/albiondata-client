@@ -192,14 +192,14 @@ func (config *config) setupCommonFlags() {
 		&config.PublicIngestBaseUrls,
 		"i",
 		"https+pow://albion-online-data.com",
-		"Base URL to send PUBLIC data to, can be 'nats://', 'http://' or 'noop' and can have multiple uploaders. Comma separated.",
+		"Base URL to send PUBLIC data to, can be 'nats://', 'http://', 'https://' or 'noop' and can have multiple uploaders. Comma separated.",
 	)
 
 	flag.StringVar(
 		&config.PrivateIngestBaseUrls,
 		"p",
 		"",
-		"Base URL to send PRIVATE data to, can be 'nats://', 'http://' or 'noop' and can have multiple uploaders. Comma separated.",
+		"Base URL to send PRIVATE data to, can be 'nats://', 'http://', 'https://' or 'noop' and can have multiple uploaders. Comma separated.",
 	)
 
 	flag.StringVar(
