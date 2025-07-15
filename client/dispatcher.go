@@ -38,9 +38,9 @@ func createUploaders(targets []string) []uploader {
 			continue
 		}
 
-		if target[0:8] == "http+pow" {
+		if target[0:8] == "http+pow" ||  target[0:9] == "https+pow" {
 			uploaders = append(uploaders, newHTTPUploaderPow(target))
-		} else if target[0:4] == "http" {
+		} else if target[0:4] == "http" || target[0:5] == "https" {
 			uploaders = append(uploaders, newHTTPUploader(target))
 		} else if target[0:4] == "nats" {
 			uploaders = append(uploaders, newNATSUploader(target))
@@ -61,9 +61,9 @@ func sendMsgToPublicUploaders(upload interface{}, topic string, state *albionSta
 
 	var PublicIngestBaseUrls = ConfigGlobal.PublicIngestBaseUrls
 	// http+pow://albion-online-data.com is used as a magic placeholder for every realm there is
-	if strings.Contains(ConfigGlobal.PublicIngestBaseUrls, "http+pow://albion-online-data.com") {
+	if strings.Contains(ConfigGlobal.PublicIngestBaseUrls, "https+pow://albion-online-data.com") {
 		// we replace the placeholder with the correct one based on the serverID from albionState
-		PublicIngestBaseUrls = strings.Replace(PublicIngestBaseUrls, "http+pow://albion-online-data.com", state.AODataIngestBaseURL, -1)
+		PublicIngestBaseUrls = strings.Replace(PublicIngestBaseUrls, "https+pow://albion-online-data.com", state.AODataIngestBaseURL, -1)
 	}
 
 	var publicUploaders = createUploaders(strings.Split(PublicIngestBaseUrls, ","))
