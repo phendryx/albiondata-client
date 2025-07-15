@@ -13,12 +13,12 @@ import (
 type operationAuctionGetOffers struct {
 	Category         string   `mapstructure:"1"`
 	SubCategory      string   `mapstructure:"2"`
-	Quality          string   `mapstructure:"3"`
-	Enchantment      uint32   `mapstructure:"4"`
-	EnchantmentLevel string   `mapstructure:"8"`
-	ItemIds          []uint16 `mapstructure:"6"`
-	MaxResults       uint32   `mapstructure:"10"`
-	IsAscendingOrder bool     `mapstructure:"12"`
+	Quality          string   `mapstructure:"5"`
+	Enchantment      uint32   `mapstructure:"6"`
+	EnchantmentLevel string   `mapstructure:"10"`
+	ItemIds          []uint16 `mapstructure:"8"`
+	MaxResults       uint32   `mapstructure:"12"`
+	IsAscendingOrder bool     `mapstructure:"14"`
 }
 
 func (op operationAuctionGetOffers) Process(state *albionState) {
