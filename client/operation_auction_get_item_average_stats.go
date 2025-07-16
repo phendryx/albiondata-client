@@ -48,7 +48,16 @@ type operationAuctionGetItemAverageStatsResponse struct {
 
 func (op operationAuctionGetItemAverageStatsResponse) Process(state *albionState) {
 	var index = op.MessageID % CacheSize
-	var mhInfo = state.marketHistoryIDLookup[index]
+
+        if state.marketHistoryIDLookup[index].albionId < 1 {
+                log.Warnf("Market History - Market history at index %d is invalid. Has albionId: %s ", index, state.marketHistoryIDLookup[index].albionId)
+                return
+        }
+
+        var mhInfo = state.marketHistoryIDLookup[index]
+	// Clear the index in the cache
+        state.marketHistoryIDLookup[index].albionId = 0
+
 	log.Debugf("Market History - Loaded itemID %d from cache at index %d", mhInfo.albionId, index)
 	log.Debug("Got response to GetItemAverageStats operation for the itemID[", mhInfo.albionId, "] of quality: ", mhInfo.quality, " and on the timescale: ", mhInfo.timescale)
 
