@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/url"
 	"runtime"
+	"time"
 	"strconv"
 	"strings"
 
@@ -137,6 +138,7 @@ func toBinaryBytes(s string) string {
 func solvePow(pow Pow) string {
 	solution := ""
 	for {
+		time.Sleep(33 * time.Microsecond)
 		randhex, _ := randomHex(8)
 		if strings.HasPrefix(toBinaryBytes(fmt.Sprintf("%x", sha256.Sum256([]byte("aod^"+randhex+"^"+pow.Key)))), pow.Wanted) {
 			log.Debugf("SOLVED!")
