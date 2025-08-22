@@ -75,7 +75,7 @@ func (u *httpUploaderPow) getPow(target interface{}) {
 	}
 }
 
-// Prooves to the server that a pow was solved by submitting
+// Proves to the server that a pow was solved by submitting
 // the pow's key, the solution and a nats msg as a POST request
 // the topic becomes part of the URL
 func (u *httpUploaderPow) uploadWithPow(pow Pow, solution string, natsmsg []byte, topic string, serverid int, identifier string) {
@@ -95,7 +95,7 @@ func (u *httpUploaderPow) uploadWithPow(pow Pow, solution string, natsmsg []byte
 	resp, err := client.Do(req)
 
 	if err != nil {
-		log.Errorf("Error while prooving pow: %v", err)
+		log.Errorf("Error while proving pow: %v", err)
 		return
 	}
 
@@ -106,7 +106,7 @@ func (u *httpUploaderPow) uploadWithPow(pow Pow, solution string, natsmsg []byte
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Errorf("HTTP Error while prooving pow. returned: %v (%v)", resp.StatusCode, string(body))
+		log.Errorf("HTTP Error while proving pow. returned: %v (%v)", resp.StatusCode, string(body))
 		return
 	}
 
