@@ -69,10 +69,11 @@ Install guide for Ubuntu LTS
 
 ### Install app binary
 
-Download latest `update-linux-amd64.gz` version from [the Releases page](https://github.com/ao-data/albiondata-client/releases)
-Unpack it with: `tar -xvf update-linux-amd64.gz`
-Move to .local/bin folder and rename it: `mv ~/Downloads/update-linux-amd64 ~/.local/bin/albiondata-client`
-Give user execution permission: `chmod u+x ~/.local/bin/albiondata-client`
+1. Download latest `update-linux-amd64.gz` version from [the Releases page](https://github.com/ao-data/albiondata-client/releases) Example: `curl -L https://github.com/ao-data/albiondata-client/releases/download/0.1.44/update-linux-amd64.gz -o ~/Downloads/update-linux-amd64.gz`
+2. Unpack it with: `gzip -d ~/Downloads/update-linux-amd64.gz`
+3. Make ~/.local/bin folder: `mkdir -p ~/local/bin`
+4. Move to .local/bin folder and rename it: `mv ~/Downloads/update-linux-amd64 ~/.local/bin/albiondata-client`
+5. Give user execution permission: `chmod u+x ~/.local/bin/albiondata-client`
 
 ### Install dependency libpcap
 
@@ -81,6 +82,8 @@ sudo apt install libpcap-dev
 ```
 
 ### Give permission for binary to capture data
+
+To allow binary to capture data without using sudo
 
 ```bash
 sudo setcap cap_net_raw,cap_net_admin=eip ~/.local/bin/albiondata-client
