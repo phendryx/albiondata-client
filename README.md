@@ -66,6 +66,8 @@ Stats for the client releases can be viewed [here](https://tooomm.github.io/gith
 ## Running on Debian/Debian based distros
 
 ### Install app binary
+<sup>`~/.local/bin` requires systemd. If you don't roll with systemd use something else. </sup>
+
 1. Create ~/.local/bin folder: `mkdir -p ~/.local/bin`
 2. Download latest `update-linux-amd64.gz` version from [the Releases page](https://github.com/ao-data/albiondata-client/releases)  
 `curl -L https://github.com/ao-data/albiondata-client/releases/latest/download/update-linux-amd64.gz -o - | gzip -d > ~/.local/bin/albiondata-client`
