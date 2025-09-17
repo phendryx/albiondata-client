@@ -63,7 +63,7 @@ Stats for the client releases can be viewed [here](https://tooomm.github.io/gith
 3. The unzipped `albiondata-client` file is a Golang binary file. You'll need to make this file executable so it can be run directly. You can do this from your Terminal with: `chmod +x albiondata-client`
 4. Run the client from your Terminal with `./albiondata-client`
 
-## Running on Debian/Debian based distros
+## Running on Debian or Debian based distros
 
 ### Install app binary
 <sup>`~/.local/bin` requires systemd. If you don't roll with systemd use something else. </sup>
