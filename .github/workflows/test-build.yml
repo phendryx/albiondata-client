@@ -65,7 +65,7 @@ jobs:
 
   build-darwin:
     name: Build MacOS Client
-    runs-on: macos-26
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v6
 
@@ -75,7 +75,7 @@ jobs:
         go-version: '1.25'
 
     - name: Build
-      run: GOARCH=amd64 go build -ldflags "-s -w -X main.version=$GITHUB_REF_NAME" albiondata-client.go
+      run: CGO_ENABLED=1 GOARCH=amd64 CC="clang -arch x86_64" CGO_LDFLAGS="-arch x86_64" go build -ldflags "-s -w -X main.version=$GITHUB_REF_NAME" albiondata-client.go
 
     - name: ls
       run: ls -la
