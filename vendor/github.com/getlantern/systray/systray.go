@@ -1,13 +1,10 @@
 /*
-Package systray is a cross platfrom Go library to place an icon and menu in the
-notification area.
-Supports Windows, Mac OSX and Linux currently.
-Methods can be called from any goroutine except Run(), which should be called
-at the very beginning of main() to lock at main thread.
+Package systray is a cross-platform Go library to place an icon and menu in the notification area.
 */
 package systray
 
 import (
+	"fmt"
 	"runtime"
 	"sync"
 	"sync/atomic"
@@ -16,18 +13,29 @@ import (
 )
 
 var (
-	hasStarted = int64(0)
-	hasQuit    = int64(0)
+	log = golog.LoggerFor("systray")
+
+	systrayReady  func()
+	systrayExit   func()
+	menuItems     = make(map[uint32]*MenuItem)
+	menuItemsLock sync.RWMutex
+
+	currentID = uint32(0)
+	quitOnce  sync.Once
 )
 
-// MenuItem is used to keep track each menu item of systray
+func init() {
+	runtime.LockOSThread()
+}
+
+// MenuItem is used to keep track each menu item of systray.
 // Don't create it directly, use the one systray.AddMenuItem() returned
 type MenuItem struct {
 	// ClickedCh is the channel which will be notified when the menu item is clicked
 	ClickedCh chan struct{}
 
 	// id uniquely identify a menu item, not supposed to be modified
-	id int32
+	id uint32
 	// title is the text shown on menu item
 	title string
 	// tooltip is the text shown when pointing to menu item
@@ -36,27 +44,46 @@ type MenuItem struct {
 	disabled bool
 	// checked menu item has a tick before the title
 	checked bool
+	// has the menu item a checkbox (Linux)
+	isCheckable bool
+	// parent item, for sub menus
+	parent *MenuItem
 }
 
-var (
-	log = golog.LoggerFor("systray")
+func (item *MenuItem) String() string {
+	if item.parent == nil {
+		return fmt.Sprintf("MenuItem[%d, %q]", item.id, item.title)
+	}
+	return fmt.Sprintf("MenuItem[%d, parent %d, %q]", item.id, item.parent.id, item.title)
+}
 
-	systrayReady  func()
-	systrayExit   func()
-	menuItems     = make(map[int32]*MenuItem)
-	menuItemsLock sync.RWMutex
-
-	currentID = int32(-1)
-)
+// newMenuItem returns a populated MenuItem object
+func newMenuItem(title string, tooltip string, parent *MenuItem) *MenuItem {
+	return &MenuItem{
+		ClickedCh:   make(chan struct{}),
+		id:          atomic.AddUint32(&currentID, 1),
+		title:       title,
+		tooltip:     tooltip,
+		disabled:    false,
+		checked:     false,
+		isCheckable: false,
+		parent:      parent,
+	}
+}
 
 // Run initializes GUI and starts the event loop, then invokes the onReady
-// callback.
-// It blocks until systray.Quit() is called.
-// Should be called at the very beginning of main() to lock at main thread.
+// callback. It blocks until systray.Quit() is called.
 func Run(onReady func(), onExit func()) {
-	runtime.LockOSThread()
-	atomic.StoreInt64(&hasStarted, 1)
+	Register(onReady, onExit)
+	nativeLoop()
+}
 
+// Register initializes GUI and registers the callbacks but relies on the
+// caller to run the event loop somewhere else. It's useful if the program
+// needs to show other UI elements, for example, webview.
+// To overcome some OS weirdness, On macOS versions before Catalina, calling
+// this does exactly the same as Run().
+func Register(onReady func(), onExit func()) {
 	if onReady == nil {
 		systrayReady = func() {}
 	} else {
@@ -70,39 +97,63 @@ func Run(onReady func(), onExit func()) {
 			close(readyCh)
 		}
 	}
-
 	// unlike onReady, onExit runs in the event loop to make sure it has time to
 	// finish before the process terminates
 	if onExit == nil {
 		onExit = func() {}
 	}
 	systrayExit = onExit
-
-	nativeLoop()
+	registerSystray()
 }
 
 // Quit the systray
 func Quit() {
-	if atomic.LoadInt64(&hasStarted) == 1 && atomic.CompareAndSwapInt64(&hasQuit, 0, 1) {
-		quit()
-	}
+	quitOnce.Do(quit)
 }
 
-// AddMenuItem adds menu item with designated title and tooltip, returning a channel
-// that notifies whenever that menu item is clicked.
-//
+// AddMenuItem adds a menu item with the designated title and tooltip.
 // It can be safely invoked from different goroutines.
+// Created menu items are checkable on Windows and OSX by default. For Linux you have to use AddMenuItemCheckbox
 func AddMenuItem(title string, tooltip string) *MenuItem {
-	id := atomic.AddInt32(&currentID, 1)
-	item := &MenuItem{nil, id, title, tooltip, false, false}
-	item.ClickedCh = make(chan struct{})
+	item := newMenuItem(title, tooltip, nil)
+	item.update()
+	return item
+}
+
+// AddMenuItemCheckbox adds a menu item with the designated title and tooltip and a checkbox for Linux.
+// It can be safely invoked from different goroutines.
+// On Windows and OSX this is the same as calling AddMenuItem
+func AddMenuItemCheckbox(title string, tooltip string, checked bool) *MenuItem {
+	item := newMenuItem(title, tooltip, nil)
+	item.isCheckable = true
+	item.checked = checked
 	item.update()
 	return item
 }
 
 // AddSeparator adds a separator bar to the menu
 func AddSeparator() {
-	addSeparator(atomic.AddInt32(&currentID, 1))
+	addSeparator(atomic.AddUint32(&currentID, 1))
+}
+
+// AddSubMenuItem adds a nested sub-menu item with the designated title and tooltip.
+// It can be safely invoked from different goroutines.
+// Created menu items are checkable on Windows and OSX by default. For Linux you have to use AddSubMenuItemCheckbox
+func (item *MenuItem) AddSubMenuItem(title string, tooltip string) *MenuItem {
+	child := newMenuItem(title, tooltip, item)
+	child.update()
+	return child
+}
+
+// AddSubMenuItemCheckbox adds a nested sub-menu item with the designated title and tooltip and a checkbox for Linux.
+// It can be safely invoked from different goroutines.
+// On Windows and OSX this is the same as calling AddSubMenuItem
+func (item *MenuItem) AddSubMenuItemCheckbox(title string, tooltip string, checked bool) *MenuItem {
+	child := newMenuItem(title, tooltip, item)
+	child.isCheckable = true
+	child.checked = checked
+	child.update()
+	return child
 }
 
 // SetTitle set the text to display on a menu item
@@ -117,7 +168,7 @@ func (item *MenuItem) SetTooltip(tooltip string) {
 	item.update()
 }
 
-// Disabled checkes if the menu item is disabled
+// Disabled checks if the menu item is disabled
 func (item *MenuItem) Disabled() bool {
 	return item.disabled
 }
@@ -161,18 +212,22 @@ func (item *MenuItem) Uncheck() {
 	item.update()
 }
 
-// update propogates changes on a menu item to systray
+// update propagates changes on a menu item to systray
 func (item *MenuItem) update() {
 	menuItemsLock.Lock()
-	defer menuItemsLock.Unlock()
 	menuItems[item.id] = item
+	menuItemsLock.Unlock()
 	addOrUpdateMenuItem(item)
 }
 
-func systrayMenuItemSelected(id int32) {
+func systrayMenuItemSelected(id uint32) {
 	menuItemsLock.RLock()
-	item := menuItems[id]
+	item, ok := menuItems[id]
 	menuItemsLock.RUnlock()
+	if !ok {
+		log.Errorf("No menu item with ID %v", id)
+		return
+	}
 	select {
 	case item.ClickedCh <- struct{}{}:
 	// in case no one waiting for the channel
