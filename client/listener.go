@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/ao-data/albiondata-client/log"
-	photon "github.com/ao-data/photon_spectator"
+	photon "github.com/ao-data/photon-spectator"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"

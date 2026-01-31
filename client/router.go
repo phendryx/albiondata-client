@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/ao-data/albiondata-client/log"
-	photon "github.com/ao-data/photon_spectator"
+	photon "github.com/ao-data/photon-spectator"
 )
 
 //Router struct definitions
