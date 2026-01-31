@@ -79,7 +79,7 @@ jobs:
         go-version: '1.25'
 
     - name: Build
-      run: go build -ldflags "-s -w -X main.version=$GITHUB_REF_NAME" albiondata-client.go
+      run: GOARCH=amd64 go build -ldflags "-s -w -X main.version=$GITHUB_REF_NAME" albiondata-client.go
 
     - name: ls
       run: ls -la
