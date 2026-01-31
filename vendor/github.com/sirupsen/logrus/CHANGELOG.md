@@ -1,7 +1,43 @@
+# 1.8.1
+Code quality:
+  * move magefile in its own subdir/submodule to remove magefile dependency on logrus consumer
+  * improve timestamp format documentation
+
+Fixes:
+  * fix race condition on logger hooks
+
+
+# 1.8.0
+
+Correct versioning number replacing v1.7.1.
+
+# 1.7.1
+
+Beware this release has introduced a new public API and its semver is therefore incorrect.
+
+Code quality:
+  * use go 1.15 in travis
+  * use magefile as task runner
+
+Fixes:
+  * small fixes about new go 1.13 error formatting system
+  * Fix for long time race condiction with mutating data hooks
+
+Features:
+  * build support for zos
+
+# 1.7.0
+Fixes:
+  * the dependency toward a windows terminal library has been removed
+
+Features:
+  * a new buffer pool management API has been added
+  * a set of `<LogLevel>Fn()` functions have been added
+
 # 1.6.0
 Fixes:
   * end of line cleanup
-  * revert the entry concurrency bug fix whic leads to deadlock under some circumstances
+  * revert the entry concurrency bug fix which leads to deadlock under some circumstances
   * update dependency on go-windows-terminal-sequences to fix a crash with go 1.14
 
 Features:
@@ -93,7 +129,7 @@ This new release introduces:
     which is mostly useful for logger wrapper
   * a fix reverting the immutability of the entry given as parameter to the hooks
     a new configuration field of the json formatter in order to put all the fields
-    in a nested dictionnary
+    in a nested dictionary
   * a new SetOutput method in the Logger
   * a new configuration of the textformatter to configure the name of the default keys
   * a new configuration of the text formatter to disable the level truncation
