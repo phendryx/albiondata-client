@@ -1,7 +1,7 @@
 github.com/ao-data/go-githubupdate v0.0.0-20230216133638-c4accecc2f64 h1:yNUKYRe3bU1XMZxcsOgbwqj6L7tYb4SaVAAPP5qvKrw=
 github.com/ao-data/go-githubupdate v0.0.0-20230216133638-c4accecc2f64/go.mod h1:nCSCu7m3B57YgiBPxHM6wXq5UWlcFkFeIDNGeBePh/4=
-github.com/ao-data/photon-spectator v0.0.0-20250307030150-b1440721c28b h1:dJvI68farhBJeztZnIB9KiBU5khRqtNNJYzM4DyGN40=
-github.com/ao-data/photon-spectator v0.0.0-20250307030150-b1440721c28b/go.mod h1:6mbPzY/+A65msI5v57mXZywvryMxBhzql5PG3JXfS1U=
+github.com/ao-data/photon-spectator v0.0.0-20260131231036-42f34c5bea4d h1:FdzB858O0tkawEt4BGplFy01c9lLIGex1s7sOlU4Gdk=
+github.com/ao-data/photon-spectator v0.0.0-20260131231036-42f34c5bea4d/go.mod h1:eB0EYLGTClM/nsKHTaE8YRLHLChxVFr6fdDfkhefD8c=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
 github.com/blang/semver v3.5.1+incompatible h1:cQNTCjp13qL8KC3Nbxr/y2Bqb63oX6wdnnjpJbkM4JQ=
 github.com/blang/semver v3.5.1+incompatible/go.mod h1:kRBLl5iJ+tD4TcOOxsy/0fnwebNt5EWlYSAyrTnjyyk=
@@ -67,8 +67,8 @@ github.com/google/gopacket v1.1.19 h1:ves8RnFZPGiFnTS0uPQStjwru6uO6h+nlr9j6fL7kF
 github.com/google/gopacket v1.1.19/go.mod h1:iJ8V8n6KS+z2U1A8pUwu8bW5SyEMkXJB8Yo/Vo+TKTo=
 github.com/gorilla/websocket v1.5.3 h1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=
 github.com/gorilla/websocket v1.5.3/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
-github.com/hashicorp/golang-lru v1.0.2 h1:dV3g9Z/unq5DpblPpw+Oqcv4dU/1omnb4Ok8iPY6p1c=
-github.com/hashicorp/golang-lru v1.0.2/go.mod h1:iADmTwqILo4mZ8BN3D2Q6+9jd8WM5uGBxy+E8yxSoD4=
+github.com/hashicorp/golang-lru/v2 v2.0.7 h1:a+bsQ5rvGLjzHuww6tVxozPZFVghXaHOwFs4luLUK2k=
+github.com/hashicorp/golang-lru/v2 v2.0.7/go.mod h1:QeFd9opnmA6QUJc5vARoKUSoFhyfM2/ZepoAG6RGpeM=
 github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 h1:iQTw/8FWTuc7uiaSepXwyf3o52HaUYcV+Tu66S3F5GA=
 github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0/go.mod h1:1NbS8ALrpOvjt0rHPNLyCIeMtbizbir8U//inJ+zuB8=
 github.com/kr/binarydist v0.1.0 h1:6kAoLA9FMMnNGSehX0s1PdjbEaACznAv/W219j2uvyo=

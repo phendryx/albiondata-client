@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/ao-data/go-githubupdate v0.0.0-20230216133638-c4accecc2f64
-	github.com/ao-data/photon-spectator v0.0.0-20250307030150-b1440721c28b
+	github.com/ao-data/photon-spectator v0.0.0-20260131231036-42f34c5bea4d
 	github.com/ctcpip/notifize v1.0.1
 	github.com/getlantern/systray v1.2.2
 	github.com/gonutz/w32 v1.0.0
@@ -33,6 +33,7 @@ require (
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/google/go-github v17.0.0+incompatible // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
+	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -56,7 +57,6 @@ require (
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65 // indirect
 	github.com/getlantern/ops v0.0.0-20231025133620-f368ab734534 // indirect
-	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/nats-io/gnatsd v1.4.1 // indirect
 	github.com/nats-io/nkeys v0.4.15 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
