@@ -1,5 +1,4 @@
 .idea/
-vendor/
 _vendor-[0-9]*
 .vscode/
 *.exe
@@ -10,3 +9,11 @@ _vendor-[0-9]*
 scripts/albiondata-client
 albiondata-client-output.txt
 config.yaml
+.secrets
+.DS_Store
+act.sh
+albiondata-client*
+buildall.sh
+run.sh
+
+

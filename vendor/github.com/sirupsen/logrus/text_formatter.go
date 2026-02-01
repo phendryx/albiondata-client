@@ -53,7 +53,10 @@ type TextFormatter struct {
 	// the time passed since beginning of execution.
 	FullTimestamp bool
 
-	// TimestampFormat to use for display when a full timestamp is printed
+	// TimestampFormat to use for display when a full timestamp is printed.
+	// The format to use is the same than for time.Format or time.Parse from the standard
+	// library.
+	// The standard Library already provides a set of predefined format.
 	TimestampFormat string
 
 	// The fields are sorted by default for a consistent output. For applications
@@ -235,6 +238,8 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 		levelColor = yellow
 	case ErrorLevel, FatalLevel, PanicLevel:
 		levelColor = red
+	case InfoLevel:
+		levelColor = blue
 	default:
 		levelColor = blue
 	}
@@ -301,6 +306,7 @@ func (f *TextFormatter) needsQuoting(text string) bool {
 		return false
 	}
 	for _, ch := range text {
+		//nolint:staticcheck // QF1001: could apply De Morgan's law
 		if !((ch >= 'a' && ch <= 'z') ||
 			(ch >= 'A' && ch <= 'Z') ||
 			(ch >= '0' && ch <= '9') ||
@@ -329,6 +335,6 @@ func (f *TextFormatter) appendValue(b *bytes.Buffer, value interface{}) {
 	if !f.needsQuoting(stringVal) {
 		b.WriteString(stringVal)
 	} else {
-		b.WriteString(fmt.Sprintf("%q", stringVal))
+		fmt.Fprintf(b, "%q", stringVal)
 	}
 }

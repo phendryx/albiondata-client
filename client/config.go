@@ -38,11 +38,15 @@ type config struct {
 	PublicIngestBaseUrls           string
 	NoCPULimit                     bool
 	PrintVersion                   bool
+	UpdateGithubOwner              string
+	UpdateGithubRepo               string
 }
 
 // config global config data
 var ConfigGlobal = &config{
-	LogLevel: "INFO",
+	LogLevel:          "INFO",
+	UpdateGithubOwner: "ao-data",
+	UpdateGithubRepo:  "albiondata-client",
 }
 
 func (config *config) SetupFlags() {
@@ -84,6 +88,14 @@ func (config *config) setupWebsocketFlags() {
 
 	config.EnableWebsockets = viper.GetBool("EnableWebsockets")
 	config.AllowedWSHosts = viper.GetStringSlice("AllowedWebsocketHosts")
+
+	// Read update configuration (use defaults if not specified)
+	if viper.IsSet("UpdateGithubOwner") {
+		config.UpdateGithubOwner = viper.GetString("UpdateGithubOwner")
+	}
+	if viper.IsSet("UpdateGithubRepo") {
+		config.UpdateGithubRepo = viper.GetString("UpdateGithubRepo")
+	}
 }
 
 func (config *config) setupDebugFlags() {

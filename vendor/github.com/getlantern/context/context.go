@@ -29,6 +29,11 @@ type Manager interface {
 	// Contextual, plus any addition values from along the stack, plus globals if so
 	// specified.
 	AsMap(obj interface{}, includeGlobals bool) Map
+
+	// Get gets the value at the given key from the current context, ascending through
+	// the context hierarchy until it finds a value, or returning the global value if none
+	// found in contexts.
+	Get(key string) (interface{}, bool)
 }
 
 type manager struct {
@@ -94,6 +99,10 @@ type Context interface {
 	// Contextual, plus any addition values from along the stack, plus globals if
 	// so specified.
 	AsMap(obj interface{}, includeGlobals bool) Map
+
+	// Get gets the value at the given key, ascending through the context hierarchy
+	// until it finds a value, or returning the global value if none found in contexts.
+	Get(key string) (interface{}, bool)
 }
 
 type context struct {
@@ -271,6 +280,33 @@ func (c *context) asMap(cm *manager, obj interface{}, includeGlobals bool) Map {
 		cm.mxGlobal.RUnlock()
 	}
 	return result
+}
+
+func (cm *manager) Get(key string) (interface{}, bool) {
+	c := cm.currentContext()
+	if c != nil {
+		return c.Get(key)
+	}
+	cm.mxGlobal.RLock()
+	result, found := cm.global[key]
+	cm.mxGlobal.RUnlock()
+	return result, found
+}
+
+func (c *context) Get(key string) (interface{}, bool) {
+	c.mx.RLock()
+	result, found := c.data[key]
+	c.mx.RUnlock()
+	if found {
+		return result, found
+	}
+	if c.parent != nil {
+		return c.parent.Get(key)
+	}
+	c.cm.mxGlobal.Lock()
+	result, found = c.cm.global[key]
+	c.cm.mxGlobal.Unlock()
+	return result, found
 }
 
 func fill(m Map, from Map) {

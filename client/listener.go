@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/ao-data/albiondata-client/log"
-	photon "github.com/ao-data/photon_spectator"
+	photon "github.com/ao-data/photon-spectator"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
@@ -219,7 +219,7 @@ func (l *listener) onReliableCommand(command *photon.PhotonCommand) {
 	params := photon.DecodeReliableMessage(msg)
 	if params == nil {
 		if !ConfigGlobal.DebugIgnoreDecodingErrors {
-			log.Debugf("ERROR: Could not decode params: [%d] (%d) (%d) %v", msg.Type, msg.ParamaterCount, len(msg.Data), base64.StdEncoding.EncodeToString(msg.Data))
+			log.Debugf("ERROR: Could not decode params: [%d] (%d) (%d) %v", msg.Type, msg.ParameterCount, len(msg.Data), base64.StdEncoding.EncodeToString(msg.Data))
 		}
 		return
 	}

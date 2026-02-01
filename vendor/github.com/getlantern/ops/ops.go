@@ -6,15 +6,29 @@
 package ops
 
 import (
+	gocontext "context"
+	"crypto/rand"
+	"fmt"
 	"sync"
+	"time"
 
 	"github.com/getlantern/context"
+
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+)
+
+const (
+	_goctx = "_goctx"
 )
 
 var (
 	cm             = context.NewManager()
 	reporters      []Reporter
 	reportersMutex sync.RWMutex
+	tracer         trace.Tracer
+	tracerMx       sync.RWMutex
 )
 
 // Reporter is a function that reports the success or failure of an Op. If
@@ -49,10 +63,15 @@ type Op interface {
 	// called multiple times, the latest error will be reported as the failure.
 	// Returns the original error for convenient chaining.
 	FailIf(err error) error
+
+	// TraceID returns the hex encoded trace ID for the current Op if and only if OpenTelemetry
+	// is enabled.
+	TraceID() string
 }
 
 type op struct {
 	ctx       context.Context
+	span      trace.Span
 	canceled  bool
 	failure   error
 	failureMx sync.RWMutex
@@ -65,13 +84,99 @@ func RegisterReporter(reporter Reporter) {
 	reportersMutex.Unlock()
 }
 
+// EnableOpenTelemetry enables exporting of traces to OpenTelemetry under the given tracerName.
+func EnableOpenTelemetry(tracerName string) {
+	tracerMx.Lock()
+	defer tracerMx.Unlock()
+	tracer = otel.Tracer(tracerName)
+}
+
+func getTracer() trace.Tracer {
+	tracerMx.RLock()
+	defer tracerMx.RUnlock()
+	return tracer
+}
+
 // Begin marks the beginning of a new Op.
 func Begin(name string) Op {
-	return &op{ctx: cm.Enter().Put("op", name).PutIfAbsent("root_op", name)}
+	return addOpenTelemetry(
+		name,
+		"",
+		&op{ctx: cm.Enter().Put("op", name).PutIfAbsent("root_op", name)},
+	)
 }
 
 func (o *op) Begin(name string) Op {
-	return &op{ctx: o.ctx.Enter().Put("op", name).PutIfAbsent("root_op", name)}
+	return addOpenTelemetry(
+		name,
+		"",
+		&op{ctx: o.ctx.Enter().Put("op", name).PutIfAbsent("root_op", name)},
+	)
+}
+
+// Resume begins a new op within the scope of an existing trace
+func Resume(name, hexTraceID string) Op {
+	return addOpenTelemetry(
+		name,
+		hexTraceID,
+		&op{ctx: cm.Enter().Put("op", name).PutIfAbsent("root_op", name)},
+	)
+}
+
+func (o *op) Resume(name, hexTraceID string) Op {
+	return addOpenTelemetry(
+		name,
+		hexTraceID,
+		&op{ctx: o.ctx.Enter().Put("op", name).PutIfAbsent("root_op", name)},
+	)
+}
+
+func addOpenTelemetry(name, hexTraceID string, o *op) Op {
+	t := getTracer()
+	if t != nil {
+		var parentCtx gocontext.Context
+		_parentCtx, hasParentCtx := cm.Get(_goctx)
+		if hasParentCtx {
+			parentCtx, _ = _parentCtx.(gocontext.Context)
+		} else {
+			parentCtx = tryResumeTrace(hexTraceID)
+		}
+		ctx, span := t.Start(parentCtx, name)
+		o.span = span
+		o.ctx.Put(_goctx, ctx)
+	}
+	return o
+}
+
+func tryResumeTrace(hexTraceID string) gocontext.Context {
+	ctx := gocontext.Background()
+	if hexTraceID == "" {
+		return ctx
+	}
+	// attempting to resume trace
+	traceID, err := trace.TraceIDFromHex(hexTraceID)
+	if err != nil {
+		fmt.Printf("Unable to resume trace from trace ID %v, will start new trace: %v\n", hexTraceID, err)
+		return ctx
+	}
+	var spanID [8]byte
+	_, err = rand.Read(spanID[:])
+	if err != nil {
+		fmt.Printf("Unable to generate span ID, will start new trace: %v\n", err)
+		return ctx
+	}
+	var spanContextConfig trace.SpanContextConfig
+	spanContextConfig.TraceID = traceID
+	spanContextConfig.SpanID = spanID
+	spanContext := trace.NewSpanContext(spanContextConfig)
+	return trace.ContextWithSpanContext(ctx, spanContext)
+}
+
+func (o *op) TraceID() string {
+	if o.span == nil {
+		return ""
+	}
+	return o.span.SpanContext().TraceID().String()
 }
 
 func (o *op) Go(fn func()) {
@@ -100,23 +205,60 @@ func (o *op) End() {
 	}
 	reportersMutex.RUnlock()
 
-	if len(reportersCopy) > 0 {
+	if len(reportersCopy) > 0 || o.span != nil {
 		o.failureMx.RLock()
 		failure := o.failure
 		o.failureMx.RUnlock()
 		ctx := o.ctx.AsMap(failure, true)
+		delete(ctx, _goctx)
 		if failure != nil {
 			_, errorSet := ctx["error"]
 			if !errorSet {
 				ctx["error"] = failure.Error()
 			}
 		}
+
 		for _, reporter := range reportersCopy {
 			reporter(failure, ctx)
+		}
+
+		if o.span != nil {
+			for key, _value := range ctx {
+				var value attribute.Value
+				switch v := _value.(type) {
+				case bool:
+					value = attribute.BoolValue(v)
+				case int:
+					value = attribute.Int64Value(int64(v))
+				case byte:
+					value = attribute.Int64Value(int64(v))
+				case int32:
+					value = attribute.Int64Value(int64(v))
+				case int64:
+					value = attribute.Int64Value(int64(v))
+				case time.Duration:
+					value = attribute.Float64Value(float64(v.Milliseconds()))
+				case float32:
+					value = attribute.Float64Value(float64(v))
+				case float64:
+					value = attribute.Float64Value(float64(v))
+				case string:
+					value = attribute.StringValue(v)
+				}
+				if value.Type() != attribute.INVALID {
+					o.span.SetAttributes(attribute.KeyValue{
+						Key:   attribute.Key(key),
+						Value: value})
+				}
+			}
 		}
 	}
 
 	o.ctx.Exit()
+
+	if o.span != nil {
+		o.span.End()
+	}
 }
 
 func (o *op) Set(key string, value interface{}) Op {
@@ -143,7 +285,9 @@ func SetGlobalDynamic(key string, valueFN func() interface{}) {
 
 // AsMap mimics the method from context.Manager.
 func AsMap(obj interface{}, includeGlobals bool) context.Map {
-	return cm.AsMap(obj, includeGlobals)
+	result := cm.AsMap(obj, includeGlobals)
+	delete(result, _goctx)
+	return result
 }
 
 func (o *op) FailIf(err error) error {
@@ -151,6 +295,9 @@ func (o *op) FailIf(err error) error {
 		o.failureMx.Lock()
 		o.failure = err
 		o.failureMx.Unlock()
+		if o.span != nil {
+			o.span.RecordError(err)
+		}
 	}
 	return err
 }
