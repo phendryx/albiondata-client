@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/ao-data/albiondata-client/client"
@@ -96,7 +97,9 @@ func tryUpdate(u *updater.Updater) bool {
 	return false
 }
 
-// restartProcess starts a new instance of the application and exits the current process.
+// restartProcess replaces the current process with the updated version.
+// On Unix systems (macOS/Linux), it uses syscall.Exec to seamlessly take over the terminal.
+// On Windows, it starts a new process and exits since exec-style replacement isn't supported.
 func restartProcess() {
 	execPath, err := os.Executable()
 	if err != nil {
@@ -106,18 +109,37 @@ func restartProcess() {
 
 	log.Info("Restarting with updated version...")
 
-	// Start the new process with the same arguments
-	cmd := exec.Command(execPath, os.Args[1:]...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Stdin = os.Stdin
+	if runtime.GOOS == "windows" {
+		// Windows doesn't support exec-style process replacement
+		// Start a new process and exit
+		cmd := exec.Command(execPath, os.Args[1:]...)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Stdin = os.Stdin
 
-	err = cmd.Start()
-	if err != nil {
-		log.Errorf("Failed to start new process: %v", err)
-		return
+		err = cmd.Start()
+		if err != nil {
+			log.Errorf("Failed to start new process: %v", err)
+			return
+		}
+
+		log.Info("New process started, exiting current process.")
+		os.Exit(0)
+	} else {
+		// On Unix systems (macOS/Linux), use syscall.Exec to replace the current process
+		// This seamlessly takes over the terminal - same PID, same terminal session
+		err = syscall.Exec(execPath, os.Args, os.Environ())
+		if err != nil {
+			log.Errorf("Failed to exec new process: %v", err)
+			// Fall back to starting a new process
+			cmd := exec.Command(execPath, os.Args[1:]...)
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			cmd.Stdin = os.Stdin
+			_ = cmd.Start()
+			os.Exit(0)
+		}
+		// If syscall.Exec succeeds, this line is never reached
+		// because the current process is replaced
 	}
-
-	log.Info("New process started, exiting current process.")
-	os.Exit(0)
 }
