@@ -137,6 +137,7 @@ func restartProcess() {
 			cmd.Stderr = os.Stderr
 			cmd.Stdin = os.Stdin
 			_ = cmd.Start()
+			cmd.Wait()
 			os.Exit(0)
 		}
 		// If syscall.Exec succeeds, this line is never reached
