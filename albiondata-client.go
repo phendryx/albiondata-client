@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"time"
 
@@ -27,8 +28,19 @@ func main() {
 
 	startUpdater()
 
-	go systray.Run()
+	// On macOS, the systray requires the Cocoa event loop to run on the main thread.
+	// So we run the client in a goroutine and systray on the main thread.
+	// On other platforms, we do the opposite for backward compatibility.
+	if runtime.GOOS == "darwin" {
+		go runClient()
+		systray.Run() // This blocks on the main thread (required for macOS)
+	} else {
+		go systray.Run()
+		runClient()
+	}
+}
 
+func runClient() {
 	c := client.NewClient(version)
 	err := c.Run()
 	if err != nil {
@@ -37,7 +49,6 @@ func main() {
 		var b = make([]byte, 1)
 		_, _ = os.Stdin.Read(b)
 	}
-
 }
 
 func startUpdater() {

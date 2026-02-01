@@ -15,5 +15,7 @@ act.sh
 albiondata-client*
 buildall.sh
 run.sh
+*.log
+*.log.*
 
 
